@@ -2,16 +2,34 @@ package com.example.heroes.entity;
 
 
 import com.example.heroes.enums.HeroType;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import java.util.Random;
 
-@Component
 public class Mage extends Hero {
-    public Mage(@Value("${mage.health}") int health) {
+    private Integer id;
+    private String name;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Mage(Integer id, int health, String name, Integer damage) {
         super(health, HeroType.MAGE.type);
-        this.damage = new Random().nextInt(6, 10);
+        this.damage = damage;
+        this.id = id;
+        this.name = name;
     }
 
     @Override

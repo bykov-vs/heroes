@@ -1,6 +1,5 @@
 package com.example.heroes;
 
-import com.example.heroes.entity.Arena;
 import com.example.heroes.entity.Mage;
 import com.example.heroes.entity.Warrior;
 import org.springframework.boot.SpringApplication;
