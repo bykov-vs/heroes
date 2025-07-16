@@ -2,11 +2,17 @@ package com.example.heroes.entity;
 
 
 import com.example.heroes.enums.HeroType;
+import jakarta.persistence.MappedSuperclass;
 
+@MappedSuperclass
 public abstract class Hero implements Moveable {
     public String type = HeroType.HERO.type;
     public int health;
     public int damage;
+
+    public Hero() {
+
+    }
 
     public Hero(int health) {
         this.health = health;

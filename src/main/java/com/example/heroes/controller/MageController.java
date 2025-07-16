@@ -1,16 +1,11 @@
 package com.example.heroes.controller;
 
 import com.example.heroes.dao.MageDao;
+import com.example.heroes.dao.MageRepository;
 import com.example.heroes.dao.dto.MageDto;
 import com.example.heroes.entity.Mage;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.heroes.entity.MageArena;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,40 +13,66 @@ import java.util.List;
 @RequestMapping("/mages")
 public class MageController {
 
-    private final MageDao mageDao;
+    private final MageRepository repository;
+    private final MageArena arena;
 
-    public MageController(MageDao mageDao) {
-        this.mageDao = mageDao;
+    public MageController(MageRepository repository, MageArena arena) {
+        this.repository = repository;
+        this.arena = arena;
     }
 
     @GetMapping
     public List<Mage> getAllMages() {
-        return mageDao.getMages();
+        return repository.findAll();
     }
 
     @GetMapping("/{id}")
     public Mage getMage(@PathVariable Integer id) {
-        return mageDao.getMage(id);
+        return repository.findById(id).orElse(null);
     }
 
     @PostMapping
     public void addMage(
             @RequestBody MageDto mageDto
     ) {
-        mageDao.addMage(mageDto);
+        Mage mage = new Mage(
+                mageDto.health(),
+                mageDto.name(),
+                mageDto.damage()
+        );
+        repository.save(mage);
     }
 
     @PutMapping("/{id}")
     public void updateMage(
             @PathVariable Integer id,
             @RequestBody MageDto mageDto) {
-        mageDao.updateMage(id, mageDto);
+        Mage mage = new Mage(
+                id,
+                mageDto.health(),
+                mageDto.name(),
+                mageDto.damage()
+        );
+        if (repository.existsById(id)) {
+            repository.save(mage);
+        }
     }
 
     @DeleteMapping("/{id}")
     public void deleteMage(
             @PathVariable Integer id
     ) {
-        mageDao.deleteMage(id);
+        repository.deleteById(id);
+    }
+
+    @GetMapping("/startFight")
+    public void startFight(
+            @RequestParam Integer mage1,
+            @RequestParam Integer mage2
+    ) {
+        Mage hero1 = repository.findById(mage1).orElse(null);
+        Mage hero2 = repository.findById(mage2).orElse(null);
+
+        arena.startFight(hero1, hero2);
     }
 }

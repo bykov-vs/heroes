@@ -2,12 +2,21 @@ package com.example.heroes.entity;
 
 
 import com.example.heroes.enums.HeroType;
+import jakarta.persistence.*;
 
 import java.util.Random;
 
+@Entity
+@Table(name = "mages")
 public class Mage extends Hero {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
+
+    public Mage() {
+
+    }
 
     public Integer getId() {
         return id;
@@ -29,6 +38,12 @@ public class Mage extends Hero {
         super(health, HeroType.MAGE.type);
         this.damage = damage;
         this.id = id;
+        this.name = name;
+    }
+
+    public Mage(int health, String name, Integer damage) {
+        super(health, HeroType.MAGE.type);
+        this.damage = damage;
         this.name = name;
     }
 
